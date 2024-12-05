@@ -10,6 +10,8 @@ python3-sklearn
 sudo apt remove -y \
 libreoffice-base-core libreoffice-core
 
+sudo apt remove --autoremove gnome-games
+
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 #-----------------------------------------------------------------------------------------------------------
