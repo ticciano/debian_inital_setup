@@ -7,7 +7,7 @@ jupyter-notebook \
 python3-numpy python3-pandas \
 python3-sklearn
 
-sudo apt remove -y\
+sudo apt remove -y \
 libreoffice-base-core libreoffice-core
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -47,3 +47,5 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 #flatpak
 sudo apt install -y flatpak gnome-software-plugin-flatpak
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+flatpak install onlyoffice -y
