@@ -6,11 +6,11 @@ zsh curl git fzf nmap htop \
 jupyter-notebook \
 python3-numpy python3-pandas \
 python3-sklearn \
-copyq flameshot
+copyq flameshot variety
 
 sudo apt remove -y \
 libreoffice-base-core libreoffice-core \
-cheese brasero shotwell
+cheese brasero shotwell transmission-common
 
 sudo apt remove --autoremove gnome-games -y
 
@@ -52,4 +52,5 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo apt install -y flatpak gnome-software-plugin-flatpak
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-flatpak install onlyoffice bitwarden -y
+flatpak -y install \
+onlyoffice bitwarden
