@@ -9,7 +9,8 @@ python3-sklearn \
 copyq flameshot
 
 sudo apt remove -y \
-libreoffice-base-core libreoffice-core
+libreoffice-base-core libreoffice-core \
+cheese brasero shotwell
 
 sudo apt remove --autoremove gnome-games -y
 
