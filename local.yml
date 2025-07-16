@@ -1,1 +1,105 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  
+- name: Configuração inicial do sistema
+  hosts: localhost
+  become: true
+  tasks:
+    # Instalar pacotes
+    - name: Instalar pacotes essenciais
+      apt:
+        name:
+          - vim
+          - tilix
+          - python3
+          - zsh
+          - curl
+          - git
+          - fzf
+          - nmap
+          - btop
+          - copyq
+          - flameshot
+          - podman
+        state: present
+        update_cache: yes
 
+    # Remover pacotes desnecessários
+    - name: Remover pacotes desnecessários
+      apt:
+        name:
+          - libreoffice-base-core
+          - libreoffice-core
+          - cheese
+          - brasero
+          - shotwell
+          - transmission-common
+        state: absent
+
+    - name: Remover pacotes de jogos do GNOME
+      apt:
+        name: gnome-games
+        state: absent
+        autoremove: yes
+
+    # Instalar VS Code (opcional)
+    - name: Perguntar se deseja instalar o VS Code
+      pause:
+        prompt: "Deseja instalar o VS Code? (Y/n): "
+      register: vscode_response
+
+    - name: Instalar VS Code
+      block:
+        - name: Adicionar chave GPG do repositório do VS Code
+          ansible.builtin.command:
+            cmd: wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
+          register: vscode_key
+        - name: Instalar chave GPG
+          copy:
+            content: "{{ vscode_key.stdout }}"
+            dest: /etc/apt/keyrings/packages.microsoft.gpg
+            owner: root
+            group: root
+            mode: '0644'
+        - name: Adicionar repositório do VS Code
+          lineinfile:
+            path: /etc/apt/sources.list.d/vscode.list
+            line: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+            create: yes
+        - name: Atualizar cache do APT
+          apt:
+            update_cache: yes
+        - name: Instalar VS Code
+          apt:
+            name: code
+            state: present
+      when: vscode_response.user_input | default('Y') | lower == 'y'
+
+    # Instalar Flatpak (opcional)
+    - name: Perguntar se deseja instalar o Flatpak
+      pause:
+        prompt: "Deseja instalar o Flatpak? (Y/n): "
+      register: flatpak_response
+
+    - name: Instalar Flatpak e configurar Flathub
+      block:
+        - name: Instalar pacotes do Flatpak
+          apt:
+            name:
+              - flatpak
+              - gnome-software-plugin-flatpak
+            state: present
+        - name: Adicionar repositório Flathub
+          command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        - name: Instalar aplicativos Flatpak
+          command: flatpak install -y flathub onlyoffice bitwarden
+      when: flatpak_response.user_input | default('Y') | lower == 'y'
+
+    # Instalar Oh My Zsh
+    - name: Instalar Oh My Zsh
+      shell: |
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      args:
+        executable: /bin/bash
