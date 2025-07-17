@@ -50,6 +50,7 @@ if [[ "$install_docker" =~ ^[Yy]$ ]]; then
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 fi
 
+
 #-----------------------------------------------------------------------------------------------------------
 # flatpak
 read -p "Deseja instalar o Flatpak? (Y/n): " install_flatpak
