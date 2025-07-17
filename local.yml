@@ -45,10 +45,10 @@
         autoremove: yes
 
     # Instalar VS Code (opcional)
-    - name: Perguntar se deseja instalar o VS Code
-      pause:
-        prompt: "Deseja instalar o VS Code? (Y/n): "
-      register: vscode_response
+    # - name: Perguntar se deseja instalar o VS Code
+    #   pause:
+    #     prompt: "Deseja instalar o VS Code? (Y/n): "
+    #   register: vscode_response
 
     - name: Instalar VS Code
       block:
@@ -75,27 +75,27 @@
           apt:
             name: code
             state: present
-      when: vscode_response.user_input | default('Y') | lower == 'y'
+      # when: vscode_response.user_input | default('Y') | lower == 'y'
 
     # Instalar Flatpak (opcional)
-    - name: Perguntar se deseja instalar o Flatpak
-      pause:
-        prompt: "Deseja instalar o Flatpak? (Y/n): "
-      register: flatpak_response
+    # - name: Perguntar se deseja instalar o Flatpak
+    #   pause:
+    #     prompt: "Deseja instalar o Flatpak? (Y/n): "
+    #   register: flatpak_response
 
-    - name: Instalar Flatpak e configurar Flathub
-      block:
-        - name: Instalar pacotes do Flatpak
-          apt:
-            name:
-              - flatpak
-              - gnome-software-plugin-flatpak
-            state: present
-        - name: Adicionar repositório Flathub
-          command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        - name: Instalar aplicativos Flatpak
-          command: flatpak install -y flathub onlyoffice bitwarden
-      when: flatpak_response.user_input | default('Y') | lower == 'y'
+    # - name: Instalar Flatpak e configurar Flathub
+    #   block:
+    #     - name: Instalar pacotes do Flatpak
+    #       apt:
+    #         name:
+    #           - flatpak
+    #           - gnome-software-plugin-flatpak
+    #         state: present
+    #     - name: Adicionar repositório Flathub
+    #       command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    #     - name: Instalar aplicativos Flatpak
+    #       command: flatpak install -y flathub onlyoffice bitwarden
+    #   when: flatpak_response.user_input | default('Y') | lower == 'y'
 
     # Instalar Oh My Zsh
     - name: Instalar Oh My Zsh
