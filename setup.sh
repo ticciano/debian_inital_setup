@@ -85,6 +85,20 @@ if [[ "$install_vscode" =~ ^[Yy]$ ]]; then
 fi
 
 #-----------------------------------------------------------------------------------------------------------
+# insync
+read -p "$(echo -e ${WHITE}"Deseja instalar o Insync? (Y/n): "${RESET})" install_insync
+install_insync=${install_insync:-Y}
+if [[ "$install_insync" =~ ^[Yy]$ ]]; then
+    executar_com_progresso "Configurando chaves e repositório Insync ($UBUNTU_CODENAME)" bash -c "
+        curl -L https://apt.insync.io/insynchq.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/insynchq.gpg > /dev/null && \
+        echo \"deb [signed-by=/etc/apt/trusted.gpg.d/insynchq.gpg] http://apt.insync.io/ubuntu $UBUNTU_CODENAME non-free contrib\" | sudo tee /etc/apt/sources.list.d/insync.list > /dev/null && \
+        sudo apt update -y
+    "
+    executar_com_progresso "Instalando Insync" \
+        sudo apt install -y insync
+fi
+
+#-----------------------------------------------------------------------------------------------------------
 # docker
 read -p "$(echo -e ${WHITE}"Deseja instalar o Docker? (Y/n): "${RESET})" install_docker
 install_docker=${install_docker:-Y}
