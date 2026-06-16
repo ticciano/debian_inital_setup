@@ -137,6 +137,9 @@ if [[ "$install_flatpak" =~ ^[Yy]$ ]]; then
         
     executar_com_progresso "Instalando Bitwarden (Flatpak)" \
         flatpak install --user -y flathub com.bitwarden.desktop
+    
+    executar_com_progresso "Instalando Vivaldi (Flatpak)" \
+        flatpak install --user -y flathub com.vivaldi.Vivaldi
 fi
 
 #-----------------------------------------------------------------------------------------------------------
