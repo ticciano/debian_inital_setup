@@ -130,13 +130,13 @@ if [[ "$install_flatpak" =~ ^[Yy]$ ]]; then
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     "
     executar_com_progresso "Instalando Obsidian (Flatpak)" \
-        flatpak install -y flathub md.obsidian.Obsidian
+        flatpak install --user -y flathub md.obsidian.Obsidian
         
     executar_com_progresso "Instalando OnlyOffice (Flatpak)" \
-        flatpak install -y flathub org.onlyoffice.desktopeditors
+        flatpak install --user -y flathub org.onlyoffice.desktopeditors
         
     executar_com_progresso "Instalando Bitwarden (Flatpak)" \
-        flatpak install -y flathub com.bitwarden.desktop
+        flatpak install --user -y flathub com.bitwarden.desktop
 fi
 
 #-----------------------------------------------------------------------------------------------------------
@@ -157,6 +157,8 @@ executar_com_progresso "Aplicando tema Passion no ~/.zshrc" bash -c "
     if [ -f \"\$HOME/.zshrc\" ]; then \
         sed -i 's/^ZSH_THEME=\".*\"/ZSH_THEME=\"passion\"/' \"\$HOME/.zshrc\"; \
     fi
+
+    sudo chsh -s $(which zsh)
 "
 
 echo -e "\n${GREEN}Script finalizado com sucesso!${RESET} Abra um novo terminal para usar o Zsh com o tema Passion."
