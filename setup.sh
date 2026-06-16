@@ -28,11 +28,11 @@ echo "Base Ubuntu detectada para repositórios: $UBUNTU_CODENAME"
 echo "Atualizando índices de pacotes..."
 sudo apt update -y
 
-echo "Instalando ferramentas básicas..."
+echo "Instalando ferramentas básicas (incluindo dependências do tema Passion)..."
 sudo apt install -y \
 vim terminator python3 \
 zsh curl git fzf nmap btop \
-copyq flameshot
+copyq flameshot bc
 
 echo "Removendo pacotes desnecessários (erros ignorados se não existirem)..."
 # Usamos || true para evitar que o script pare caso o pacote não exista na derivada
@@ -95,6 +95,31 @@ if [[ "$install_flatpak" =~ ^[Yy]$ ]]; then
 fi
 
 #-----------------------------------------------------------------------------------------------------------
-# oh-my-zsh (Executado por último pois costuma mudar o shell e prender a execução)
+# oh-my-zsh e Tema Passion
 echo "Instalando Oh My Zsh..."
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+# Move a pasta antiga se existir
+mv "$HOME/.oh-my-zsh" "$HOME/.old-oh-my-zsh"
+
+# Executa o instalador limpando explicitamente a variável ZSH herdada da sessão ativa
+ZSH= sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+echo "Instalando e configurando o tema Passion..."
+# Garante que estamos trabalhando temporariamente fora do diretório de destino
+TEMP_DIR=$(mktemp -d)
+git clone https://github.com/ChesterYue/ohmyzsh-theme-passion "$TEMP_DIR/ohmyzsh-theme-passion"
+
+# Copia o arquivo do tema para o diretório correto do Oh My Zsh
+cp "$TEMP_DIR/ohmyzsh-theme-passion/passion.zsh-theme" "$HOME/.oh-my-zsh/themes/passion.zsh-theme"
+
+# Limpa o diretório temporário utilizado no clone
+rm -rf "$TEMP_DIR"
+
+# Modifica o .zshrc alterando a linha do ZSH_THEME para "passion" via regex (sed)
+if [ -f "$HOME/.zshrc" ]; then
+    sed -i 's/^ZSH_THEME=".*"/ZSH_THEME="passion"/' "$HOME/.zshrc"
+    echo "Tema Passion configurado com sucesso no seu ~/.zshrc."
+else
+    echo "Aviso: ~/.zshrc não encontrado. O tema foi copiado, mas precisa ser ativado manualmente."
+fi
+
+echo "Script finalizado com sucesso! Para aplicar as mudanças do terminal, mude seu shell padrão ou reinicie a sessão."
