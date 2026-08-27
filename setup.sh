@@ -59,7 +59,7 @@ executar_com_progresso "Atualizando índices de pacotes" \
     sudo apt update -y
 
 executar_com_progresso "Instalando ferramentas básicas e dependências" \
-    sudo apt install -y vim terminator python3 zsh curl git fzf nmap btop copyq flameshot bc dnsutils
+    sudo apt install -y vim terminator python3 zsh curl git fzf nmap btop copyq flameshot bc
 
 executar_com_progresso "Removendo pacotes desnecessários" \
     bash -c "sudo apt remove -y libreoffice-base-core libreoffice-core cheese brasero shotwell transmission-common gnome-games || true"
